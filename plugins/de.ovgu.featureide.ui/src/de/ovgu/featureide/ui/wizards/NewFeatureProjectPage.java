@@ -47,15 +47,16 @@ import de.ovgu.featureide.core.builder.IComposerExtensionBase;
  */
 public class NewFeatureProjectPage extends WizardPage {
 
-	private IComposerExtensionBase composerExtension = null;
-	private IComposerExtensionBase[] extensions = null;
+	protected IComposerExtensionBase composerExtension = null;
+	protected IComposerExtensionBase[] extensions = null;
 	
-	private Text sourcePath, configsPath;
+	protected Text sourcePath;
+	protected Text configsPath;
 	protected Text buildPath;
 	
-	private Combo toolCB;
+	protected Combo toolCB;
 	protected GridData gd = new GridData(GridData.FILL_HORIZONTAL);
-	private GridLayout layout = new GridLayout();
+	protected GridLayout layout = new GridLayout();
 	protected Group pathGroup;
 	protected Label buildLabel;
 	private boolean canFlipToNextPage = true;
@@ -175,7 +176,7 @@ public class NewFeatureProjectPage extends WizardPage {
 		return composerExtension != null;
 	}
 	
-	private void addListeners() {
+	protected void addListeners() {
 		toolCB.addModifyListener(new ModifyListener() {
 			
 			@Override
@@ -237,10 +238,32 @@ public class NewFeatureProjectPage extends WizardPage {
 		if (isEnabled(buildPath) && isInvalidPath(getBuildPath(), "Build"))return;
 		if (isEnabled(configsPath) && isInvalidPath(getConfigPath(), "Equations"))return;
 		
+		if (compositionTool.supportsAndroid()) {
+			
+			canFlipToNextPage = false;
+			setErrorMessage(null);
+			setPageComplete(true);
+			
+			if (getSourcePath().equals("src") || getSourcePath().equals("res")) {
+				updateStatus("Source Path: \"src\" and \"res\" folders are reserved for Android.");
+				return;
+			}
+			if (getBuildPath().equals("src") || getBuildPath().equals("res")) {
+				updateStatus("Build Path: \"src\" and \"res\" folders are reserved for Android.");
+				return;
+			}
+			if (getConfigPath().equals("src") || getConfigPath().equals("res")) {
+				updateStatus("Config Path: \"src\" and \"res\" folders are reserved for Android.");
+				return;
+			}
+			
+			return;
+		}
+		
 		updateStatus(null);
 	}
 
-	private boolean isEnabled(Text text) {
+	protected boolean isEnabled(Text text) {
 		if (text.isEnabled() && text.isVisible()) {
 			return true;
 		}

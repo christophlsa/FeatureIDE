@@ -31,6 +31,7 @@ import org.eclipse.core.runtime.QualifiedName;
 
 import de.ovgu.featureide.core.builder.IComposerExtensionClass;
 import de.ovgu.featureide.core.fstmodel.FSTModel;
+import de.ovgu.featureide.core.signature.ProjectSignatures;
 import de.ovgu.featureide.fm.core.FeatureModel;
 
 
@@ -133,6 +134,8 @@ public interface IFeatureProject extends IBuilderMarkerHandler {
 	String getFolderName(IResource resource, IFolder folder);
 
 	IProject getProject();
+	
+	ProjectSignatures getProjectSignatures();
 
 	FSTModel getFSTModel();
 
@@ -198,7 +201,7 @@ public interface IFeatureProject extends IBuilderMarkerHandler {
 	/**
 	 * @return True if a source file, or the current configuration changed.
 	 */
-	boolean buildRelavantChanges();
+	boolean buildRelevantChanges();
 	
 	void built();
 

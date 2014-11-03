@@ -130,7 +130,7 @@ public abstract class ComposerExtensionClass implements IComposerExtensionClass 
 		}
 	}
 	
-	private void copy(IFolder featureFolder, IFolder buildFolder) throws CoreException {
+	protected void copy(IFolder featureFolder, IFolder buildFolder) throws CoreException {
 		if (!featureFolder.exists()) {
 			return;
 		}
@@ -316,12 +316,12 @@ public abstract class ComposerExtensionClass implements IComposerExtensionClass 
 		return CorePlugin.getDefault().getConfigurationExtensions().getFirst();
 	}
 	
-	public void buildConfiguration(IFolder folder, Configuration configuration, String congurationName) {
+	public void buildConfiguration(IFolder folder, Configuration configuration, String configurationName) {
 		try {
 			if (!folder.exists()) {
 				folder.create(true, false, null);
 			}
-			IFile configurationFile = folder.getFile(congurationName + "." + getConfigurationExtension());
+			IFile configurationFile = folder.getFile(configurationName + "." + getConfigurationExtension());
 			ConfigurationWriter writer = new ConfigurationWriter(configuration);
 			writer.saveToFile(configurationFile);
 			copyNotComposedFiles(configuration, folder);
@@ -366,9 +366,17 @@ public abstract class ComposerExtensionClass implements IComposerExtensionClass 
 		return false;
 	}
 	
+	public boolean createFolderForFeatures() {
+		return true;
+	}
+	
+	public boolean supportsAndroid() {
+		return false;
+	}
+	
 	protected boolean isPluginInstalled(String ID) {
-		for(Bundle b :InternalPlatform.getDefault().getBundleContext().getBundles()){
-			if(b.getSymbolicName().startsWith(ID)) {
+		for (Bundle b :InternalPlatform.getDefault().getBundleContext().getBundles()) {
+			if (b.getSymbolicName().startsWith(ID)) {
 				return true;
 			}
 		}

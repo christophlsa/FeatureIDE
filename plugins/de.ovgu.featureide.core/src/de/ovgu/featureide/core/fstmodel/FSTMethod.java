@@ -27,7 +27,7 @@ import java.util.LinkedList;
  * 
  * @author Jens Meinicke
  */
-public class FSTMethod extends RoleElement {
+public class FSTMethod extends RoleElement<FSTMethod> {
 
 	private LinkedList<String> parameterTypes;
 	private boolean isConstructor;
@@ -62,18 +62,19 @@ public class FSTMethod extends RoleElement {
 		this(name, parameterTypes, type, modifiers, body, beginLine, endLine, "", "");
 	}
 
-	public FSTMethod(String name, LinkedList<String> parameterTypes, String type, String modifiers, String body, int beginLine, int endLine, String contract) {
+	public FSTMethod(String name, LinkedList<String> parameterTypes, String type, String modifiers, String body, int beginLine,
+			int endLine, String contract) {
 		this(name, parameterTypes, type, modifiers, body, beginLine, endLine, contract, "");
 	}
 
-	public FSTMethod(String name, LinkedList<String> parameterTypes, String type, String modifiers, String body, int beginLine, int endLine, String contract, String compKey) {
+	public FSTMethod(String name, LinkedList<String> parameterTypes, String type, String modifiers, String body, int beginLine,
+			int endLine, String contract, String compKey) {
 		super(name, type, modifiers, body, beginLine, endLine);
 		this.parameterTypes = parameterTypes;
 		this.contract = contract;
 		this.compKey = compKey;
 	}
 
-	@Override
 	public String getFullName() {
 		StringBuilder fullname = new StringBuilder();
 		fullname.append(name);
@@ -131,4 +132,20 @@ public class FSTMethod extends RoleElement {
 		}
 		return false;
 	}
+
+	public boolean contractsInRefinements() {
+		for (FSTRole role : getRole().getFSTClass().getRoles()) {
+			if (role.getFeature().equals(getRole().getFeature())) {
+				continue;
+			}
+			for (FSTMethod method : role.getClassFragment().getMethods()) {
+				if (method.getName().equals(getName()) && method.getParameter().equals(getParameter()) 
+						&& method.hasContract()) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
 }
