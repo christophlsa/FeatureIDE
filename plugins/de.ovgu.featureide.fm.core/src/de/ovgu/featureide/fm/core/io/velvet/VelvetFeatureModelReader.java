@@ -926,8 +926,6 @@ public class VelvetFeatureModelReader extends AbstractFeatureModelReader {
 	}
 
 	private void parseModel(final Tree root) {
-		// TODO: remove if done
-		System.err.println(root.toStringTree());
 		final LinkedList<Tree> nodeList = getChildren(root);
 		while (!nodeList.isEmpty()) {
 			final Tree curNode = nodeList.poll();
