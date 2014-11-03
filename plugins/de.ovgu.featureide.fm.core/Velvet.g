@@ -17,6 +17,7 @@ tokens {
 	USE				='use';
 	IMPORTINSTANCE	='instance';
 	IMPORTINTERFACE	='interface';
+	IMPORTREFERENCE	='reference';
 
 	VAR_INT 	='int';
 	VAR_FLOAT 	='float';
@@ -62,6 +63,8 @@ tokens {
 	USES;
 	INST;
 	INTF;
+	REF;
+	PARAMETER;
 }
 
 @lexer::header {package de.ovgu.featureide.fm.core.io.velvet;}
@@ -84,9 +87,14 @@ velvetModel
 concept 
 	: CONCEPT ID  
 		(ATTR_OP_LESS conceptBaseSpec definitionsSpec? |
-		(COLON conceptBaseExt)? (instanceImports interfaceImports | interfaceImports instanceImports | interfaceImports | instanceImports)? 
+		(COLON conceptBaseExt)? parameter? 
 		definitions?)
-	-> ^(CONCEPT ID conceptBaseSpec? conceptBaseExt? instanceImports? interfaceImports? definitions?)
+	-> ^(CONCEPT ID conceptBaseSpec? conceptBaseExt? parameter? definitions?)
+	;
+
+parameter
+	: (instanceImports interfaceImports | interfaceImports instanceImports | interfaceImports | instanceImports) referenceImports?
+	-> ^(PARAMETER instanceImports? interfaceImports? referenceImports?)
 	;
 
 conceptBaseExt
@@ -107,6 +115,11 @@ instanceImports
 interfaceImports
 	: IMPORTINTERFACE ID name (COMMA ID name)* 
 	-> ^(INTF (ID name)+)
+	;
+
+referenceImports
+	: IMPORTREFERENCE ID name ( COMMA ID name ) *
+	-> ^(REF (ID name)+)
 	;
 
 cinterface : CINTERFACE ID  (COLON interfaceBaseExt)? definitions 

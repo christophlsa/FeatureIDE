@@ -597,11 +597,16 @@ public class VelvetFeatureModelReader extends AbstractFeatureModelReader {
 			case VelvetParser.BASEEXT:
 				parseInheritance(curNode);
 				break;
+			case VelvetParser.PARAMETER:
+				break;
 			case VelvetParser.INST:
 				parseInstanceImport(curNode);
 				break;
 			case VelvetParser.INTF:
 				parseInterfaceImport(curNode);
+				break;
+			case VelvetParser.REF:
+				parseReferenceImport(curNode);
 				break;
 			case VelvetParser.DEF:
 				parseDefinitions(curNode);
@@ -913,6 +918,11 @@ public class VelvetFeatureModelReader extends AbstractFeatureModelReader {
 				}
 			}
 		}
+	}
+
+	private void parseReferenceImport(final Tree root) {
+		// TODO: reference not implemented yet (use as instance instead)
+		parseInstanceImport(root);
 	}
 
 	private void parseModel(final Tree root) {
