@@ -96,6 +96,8 @@ public class ExtendedFeatureModel extends FeatureModel {
 	
 	protected FeatureModel mappingModel = null;
 
+	protected boolean specialized = false;
+
 	@Override
 	protected FeatureModelAnalyzer createAnalyser() {
 		return new ExtendedFeatureModelAnalyzer(this);
@@ -239,6 +241,17 @@ public class ExtendedFeatureModel extends FeatureModel {
 	 */
 	public void setMappingModel(FeatureModel mappingModel) {
 		this.mappingModel = mappingModel;
+	}
+
+	/**
+	* @return Returning true if model is specialized from another model.
+	*/
+	public boolean isSpecialized() {
+		return specialized;
+	}
+
+	public void setSpecialized(boolean specialized) {
+		this.specialized = specialized;
 	}
 
 	public void runTests() {

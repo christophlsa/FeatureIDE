@@ -52,6 +52,7 @@ tokens {
 	CONSTR;
 	ACONSTR;
 	BASEEXT;
+	BASESPEC;
 	DEF;
 	FEAT;
 	GROUP;
@@ -82,9 +83,10 @@ velvetModel
 	
 concept 
 	: CONCEPT ID  
+		(ATTR_OP_LESS conceptBaseSpec definitionsSpec? |
 		(COLON conceptBaseExt)? (instanceImports interfaceImports | interfaceImports instanceImports | interfaceImports | instanceImports)? 
-		definitions?
-	-> ^(CONCEPT ID conceptBaseExt? instanceImports? interfaceImports? definitions?)
+		definitions?)
+	-> ^(CONCEPT ID conceptBaseSpec? conceptBaseExt? instanceImports? interfaceImports? definitions?)
 	;
 
 conceptBaseExt
@@ -92,6 +94,11 @@ conceptBaseExt
 	-> ^(BASEEXT ID+)
 	;
 	
+conceptBaseSpec
+	: ID (COMMA ID)* 
+	-> ^(BASESPEC ID+)
+	;
+
 instanceImports
 	: IMPORTINSTANCE ID name (COMMA ID name)* 
 	-> ^(INST (ID name)+)
@@ -118,6 +125,11 @@ name: ID
 definitions
 	: START_C definition END_C
 	-> ^(DEF definition? EMPTY)
+	;
+
+definitionsSpec
+	: START_C constraint+ END_C
+	-> ^(DEF constraint+ EMPTY)
 	;
 
 definition 

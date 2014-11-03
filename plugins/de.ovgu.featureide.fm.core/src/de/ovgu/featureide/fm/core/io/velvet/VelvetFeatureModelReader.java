@@ -591,6 +591,9 @@ public class VelvetFeatureModelReader extends AbstractFeatureModelReader {
 				parentStack.push(rootFeature);
 
 				break;
+			case VelvetParser.BASESPEC:
+				parseSpecialization(curNode);
+				break;
 			case VelvetParser.BASEEXT:
 				parseInheritance(curNode);
 				break;
@@ -816,6 +819,11 @@ public class VelvetFeatureModelReader extends AbstractFeatureModelReader {
 		}
 	}
 
+	private void parseSpecialization(final Tree root) {
+		extFeatureModel.setSpecialized(true);
+		parseInheritance(root);
+	}
+
 	private void parseInheritance(final Tree root) {
 		final LinkedList<Tree> nodeList = getChildren(root);
 
@@ -908,6 +916,8 @@ public class VelvetFeatureModelReader extends AbstractFeatureModelReader {
 	}
 
 	private void parseModel(final Tree root) {
+		// TODO: remove if done
+		System.err.println(root.toStringTree());
 		final LinkedList<Tree> nodeList = getChildren(root);
 		while (!nodeList.isEmpty()) {
 			final Tree curNode = nodeList.poll();
